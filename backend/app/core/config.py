@@ -59,7 +59,11 @@ class Settings(BaseSettings):
     # Proxy Configuration
     USE_PROXIES: bool = True
     PROXY_PROVIDER: str = "brightdata"  # brightdata, smartproxy, etc.
-    PROXY_API_KEY: Optional[str] = None
+    PROXY_HOST: Optional[str] = None
+    PROXY_PORT: Optional[int] = None
+    PROXY_USERNAME: Optional[str] = None
+    PROXY_PASSWORD: Optional[str] = None
+    PROXY_SSL_CERT_PATH: Optional[str] = None
     
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 100

@@ -151,8 +151,29 @@ class BaseScraper(ABC):
     
     async def _get_proxy_config(self) -> Optional[Dict[str, str]]:
         """Get proxy configuration."""
-        # This would integrate with your proxy provider
-        # For now, return None (no proxy)
+        if not settings.USE_PROXIES:
+            return None
+            
+        if settings.PROXY_PROVIDER == "brightdata":
+            if not all([settings.PROXY_HOST, settings.PROXY_PORT, 
+                       settings.PROXY_USERNAME, settings.PROXY_PASSWORD]):
+                logger.warning("Incomplete Bright Data proxy configuration")
+                return None
+                
+            proxy_config = {
+                "server": f"https://{settings.PROXY_HOST}:{settings.PROXY_PORT}",
+                "username": settings.PROXY_USERNAME,
+                "password": settings.PROXY_PASSWORD,
+            }
+            
+            # Note: For production, you may need to handle SSL certificate verification
+            # For now, we'll use the proxy without custom certificate handling
+            # as Playwright should handle it automatically
+            
+            logger.info(f"Using Bright Data proxy: {settings.PROXY_HOST}:{settings.PROXY_PORT}")
+            return proxy_config
+            
+        # Add other proxy providers here if needed
         return None
     
     async def random_delay(self, min_seconds: float = 0.5, max_seconds: float = 2.0) -> None:
